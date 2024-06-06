@@ -2,7 +2,38 @@
 
 ## Übersicht
 
-Das Energiemanagementsystem besteht aus einem zentralen Controller und verschiedenen Geräten im Hausnetz. Die Geräte sind in drei Haupttypen unterteilt und kommunizieren über das MQTT-Protokoll mit dem Controller. Der zentrale Controller, umgesetzt in Node-RED, steuert die Energieverteilung basierend auf den aktuellen Bedingungen und den Prioritäten der Geräte.
+Das Home Energy Optimization Protocol (HEOP) ist ein spezifiziertes Kommunikationsprotokoll, das entwickelt wurde, um die Energieverteilung und den Energieverbrauch in Smart Homes effizient zu steuern und zu optimieren. Es ermöglicht die Integration und Koordination verschiedener elektrischer Geräte und Systeme innerhalb eines Haushalts, um den Energieverbrauch zu minimieren, die Nutzung erneuerbarer Energien zu maximieren und die Betriebskosten zu senken.
+
+HEOP verwendet das MQTT-Protokoll zur Kommunikation zwischen einem zentralen Controller und den verbundenen Geräten im Hausnetz. Der zentrale Controller überwacht den Status und den Energieverbrauch der Geräte, sendet Steuerbefehle und stellt sicher, dass die Energienutzung basierend auf vordefinierten Prioritäten und Parametern optimiert wird.
+
+### Hauptfunktionen von HEOP
+
+#### Echtzeit-Überwachung und -Steuerung:
+
+Der zentrale Controller überwacht kontinuierlich den Status und den Energieverbrauch der angeschlossenen Geräte und kann in Echtzeit Steuerbefehle senden, um Geräte ein- oder auszuschalten oder deren Stromaufnahme anzupassen.
+
+#### Priorisierung von Geräten:
+
+Geräte werden in verschiedene Prioritätsklassen eingeteilt, die auf ihrer Wichtigkeit und ihrem Energiebedarf basieren. Dies ermöglicht eine effektive Steuerung und Optimierung der Energienutzung, indem kritische Geräte bevorzugt werden.
+
+#### Energieoptimierung:
+
+Durch die Berücksichtigung der aktuellen und erwarteten Stromaufnahme der Geräte kann der zentrale Controller die Energienutzung optimieren, indem er sicherstellt, dass Geräte nur dann aktiviert werden, wenn genügend Energie verfügbar ist, insbesondere aus erneuerbaren Quellen wie Solarenergie.
+
+#### Heartbeat-Protokoll:
+
+Geräte senden regelmäßig Heartbeat-Nachrichten an den zentralen Controller, um ihren aktuellen Status und Energieverbrauch zu übermitteln. Dies stellt sicher, dass der Controller stets über den Zustand der Geräte informiert ist und bei Bedarf eingreifen kann.
+
+#### Fehlermanagement:
+
+Geräte können Fehlermeldungen an den zentralen Controller senden, der diese überwacht und entsprechende Maßnahmen zur Fehlerbehebung ergreifen kann.
+
+#### Datenprotokollierung:
+
+Der zentrale Controller kann die empfangenen Daten zur späteren Analyse und Optimierung der Energienutzung protokollieren. Dies ermöglicht es den Benutzern, ihren Energieverbrauch zu überwachen und gezielte Maßnahmen zur Effizienzsteigerung zu ergreifen.
+
+### Zielsetzung
+HEOP zielt darauf ab, den Energieverbrauch in Smart Homes effizienter zu gestalten, die Nutzung erneuerbarer Energien zu maximieren und die Betriebskosten zu senken. Es bietet eine flexible und skalierbare Lösung, die sich an die individuellen Bedürfnisse und Prioritäten der Benutzer anpassen lässt, und unterstützt die Integration verschiedener Geräte und Systeme in ein einheitliches Energiemanagementnetzwerk.
 
 ## Gerätetypen
 
