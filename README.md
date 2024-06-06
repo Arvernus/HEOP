@@ -1,10 +1,10 @@
 # Home Energy Optimization Protocol (HEOP)
 
-#### Übersicht
+## Übersicht
 
 Das Energiemanagementsystem besteht aus einem zentralen Controller und verschiedenen Geräten im Hausnetz. Die Geräte sind in drei Haupttypen unterteilt und kommunizieren über das MQTT-Protokoll mit dem Controller. Der zentrale Controller, umgesetzt in Node-RED, steuert die Energieverteilung basierend auf den aktuellen Bedingungen und den Prioritäten der Geräte.
 
-#### Gerätetypen
+## Gerätetypen
 
 ### Typ 1: Einfache Ein-/Ausschaltgeräte
 - **Beschreibung:** Diese Geräte können ein- und ausgeschaltet werden und verbrauchen entweder eine konstante oder variable Strommenge. Sie müssen für eine bestimmte Mindestzeit eingeschaltet bleiben.
