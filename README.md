@@ -45,6 +45,10 @@ HEOP zielt darauf ab, den Energieverbrauch in Smart Homes effizienter zu gestalt
   - `priority_class`: Prioritätsklasse, um eine standardisierte Priorität zu setzen
   - `max_off_time` (optional): Maximale Zeit, die das Gerät ausgeschaltet bleiben kann (in Minuten)
 
+??? Was ist mit zusätzlichen Informationen wie z.B. Tageszeiten/Tage an denen ein Gerät genutzt/nicht genutzt werden darf?
+
+??? Was ist mit Informationen aus welchen Quelle ein Gerät gespeist werden soll (z.B. das laden von etwas soll nur bei verfügbarem Solarstrom erfolgen)
+
 ### Typ 2: Durchlaufgeräte
 - **Beschreibung:** Diese Geräte müssen, wenn sie einmal eingeschaltet sind, ihren Zyklus komplett durchlaufen. Dazu gehören Geräte wie Waschmaschinen oder Geschirrspüler.
 - **Parameter:**
@@ -52,6 +56,12 @@ HEOP zielt darauf ab, den Energieverbrauch in Smart Homes effizienter zu gestalt
   - `estimated_duration`: Geschätzte Dauer des gesamten Zyklus (in Minuten)
   - `priority_class`: Prioritätsklasse, um eine standardisierte Priorität zu setzen
   - `max_off_time` (optional): Maximale Zeit, die das Gerät ausgeschaltet bleiben kann (in Minuten)
+
+??? Was ist mit zusätzlichen Informationen wie z.B. Tageszeiten/Tage an denen ein Gerät genutzt/nicht genutzt werden darf?
+
+??? Was ist mit Informationen aus welchen Quelle ein Gerät gespeist werden soll (z.B. das laden von etwas soll nur bei verfügbarem Solarstrom erfolgen)
+
+??? Kann ein solches Gerät melden wenn es fertig ist?
 
 ### Typ 3: Regelbare Geräte
 - **Beschreibung:** Diese Geräte können nicht nur ein- und ausgeschaltet werden, sondern auch in ihrer Stromaufnahme geregelt werden. Beispiele sind elektrische Heizungen oder Klimaanlagen.
@@ -61,6 +71,12 @@ HEOP zielt darauf ab, den Energieverbrauch in Smart Homes effizienter zu gestalt
   - `priority_class`: Prioritätsklasse, um eine standardisierte Priorität zu setzen
   - `min_on_time`: Mindestzeit, die das Gerät eingeschaltet bleiben muss (in Minuten)
   - `max_off_time` (optional): Maximale Zeit, die das Gerät ausgeschaltet bleiben kann (in Minuten)
+
+??? Was ist mit zusätzlichen Informationen wie z.B. Tageszeiten/Tage an denen ein Gerät genutzt/nicht genutzt werden darf?
+
+??? Was ist mit Informationen aus welchen Quelle ein Gerät gespeist werden soll (z.B. das laden von etwas soll nur bei verfügbarem Solarstrom erfolgen)
+
+??? Wäre es eventuell sinnvoll das ein solches Gerät einen aktuellen Bedarf anmelden kann und dann der Controler entscheidet ob das Gerät Strom bekommt
 
 ## Prioritätsklassen
 
@@ -81,6 +97,8 @@ Das Heartbeat-Protokoll übermittelt dynamische Informationen über den aktuelle
 - `device_id`: Eindeutige Kennung des Geräts (z.B. MAC-Adresse, Hersteller und Seriennummer)
 - `status`: Der aktuelle Status des Geräts (z.B. `on`, `off`, `override_on`, `override_off`, `error`)
 - `current_power`: Aktuelle Stromaufnahme (in Watt)
+
+??? Status Werte erklären
 
 **Optionale Felder:**
 - `expected_power_1min`: Erwarteter Stromverbrauch in der nächsten Minute (in Wattstunden)
@@ -148,3 +166,6 @@ Die Geräte kommunizieren mit dem zentralen Controller über das MQTT-Protokoll.
 ## Zusammenfassung
 
 Durch das erneute Senden der Heartbeat-Nachricht alle 60 Sekunden bleibt der Controller über den Zustand des Geräts informiert. Die Nutzung von retained messages wird nur für die Registrierungsmeldung verwendet, um die Geräteinformationen beim Neustart oder für neue Abonnenten bereitzustellen. Die Festlegung einer eindeutigen `device_id` und die Toleranz von maximal zwei fehlenden Heartbeat-Nachrichten gewährleisten die Zuverlässigkeit und Konsistenz des Systems. Die strukturierte Kommunikation im Energiemanagementsystem wird durch die MQTT-Themenhierarchie mit einem individuell definierbaren Präfix unterstützt.
+
+??? Wäre es nicht sinnvoll das es mehrere Controler geben kann die sich untereinander abstimmen um auch dort eine Redundanz zu erlauen
+
