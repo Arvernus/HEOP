@@ -17,21 +17,111 @@ HEOP verwendet das **MQTT 5.0** Protokoll zur Kommunikation zwischen einem oder 
 - **Sicherheitsaspekte**
 - **Mehrere Controller und Redundanz**
 
+### Zielsetzung
+
+HEOP zielt darauf ab, den Energieverbrauch in Smart Homes effizienter zu gestalten, die Nutzung erneuerbarer Energien zu maximieren und die Betriebskosten zu senken. Es bietet eine flexible und skalierbare Lösung, die sich an die individuellen Bedürfnisse und Prioritäten der Benutzer anpassen lässt, und unterstützt die Integration verschiedener Geräte und Systeme in ein einheitliches Energiemanagementnetzwerk.
+
 ## Gerätetypen
 
-*(Gerätetypen und deren Parameter bleiben unverändert und sind bereits präzise definiert.)*
+### Typ 1: Einfache Ein-/Ausschaltgeräte
+
+- **Beschreibung:**  
+  Diese Geräte können ein- und ausgeschaltet werden und verbrauchen entweder eine konstante oder variable Strommenge. Sie müssen für eine bestimmte Mindestzeit eingeschaltet bleiben.
+
+- **Parameter:**
+  - `power_consumption`: Konstante oder variable Stromaufnahme (in Watt)
+  - `min_on_time`: Mindestzeit, die das Gerät eingeschaltet bleiben muss (in Minuten)
+  - `priority_class`: Prioritätsklasse, um eine standardisierte Priorität zu setzen
+  - `max_off_time` (optional): Maximale Zeit, die das Gerät ausgeschaltet bleiben kann (in Minuten)
+  - `allowed_time_frames` (optional): Liste von Zeiträumen, in denen das Gerät betrieben werden darf (z. B. `["08:00-12:00", "14:00-18:00"]`)
+  - `preferred_energy_sources` (optional): Bevorzugte Energiequellen (z. B. `["solar", "battery"]`)
+
+### Typ 2: Durchlaufgeräte
+
+- **Beschreibung:**  
+  Diese Geräte müssen, wenn sie einmal eingeschaltet sind, ihren Zyklus komplett durchlaufen. Dazu gehören Geräte wie Waschmaschinen oder Geschirrspüler.
+
+- **Parameter:**
+  - `estimated_power`: Geschätzter Stromverbrauch für einen kompletten Zyklus (in kWh)
+  - `estimated_duration`: Geschätzte Dauer des gesamten Zyklus (in Minuten)
+  - `priority_class`: Prioritätsklasse, um eine standardisierte Priorität zu setzen
+  - `max_off_time` (optional): Maximale Zeit, die das Gerät ausgeschaltet bleiben kann (in Minuten)
+  - `allowed_time_frames` (optional): Liste von Zeiträumen, in denen das Gerät betrieben werden darf
+  - `preferred_energy_sources` (optional): Bevorzugte Energiequellen
+
+### Typ 3: Regelbare Geräte
+
+- **Beschreibung:**  
+  Diese Geräte können nicht nur ein- und ausgeschaltet werden, sondern auch in ihrer Stromaufnahme geregelt werden. Beispiele sind elektrische Heizungen oder Klimaanlagen.
+
+- **Parameter:**
+  - `min_power`: Mindeststromaufnahme (in Watt), die das Gerät benötigt, um zu funktionieren
+  - `max_power`: Maximale Stromaufnahme (in Watt), die das Gerät aufnehmen kann
+  - `priority_class`: Prioritätsklasse, um eine standardisierte Priorität zu setzen
+  - `min_on_time`: Mindestzeit, die das Gerät eingeschaltet bleiben muss (in Minuten)
+  - `max_off_time` (optional): Maximale Zeit, die das Gerät ausgeschaltet bleiben kann (in Minuten)
+  - `allowed_time_frames` (optional): Liste von Zeiträumen, in denen das Gerät betrieben werden darf
+  - `preferred_energy_sources` (optional): Bevorzugte Energiequellen
+  - `current_demand` (optional): Aktueller Leistungsbedarf des Geräts (in Watt)
 
 ## Prioritätsklassen
 
-*(Prioritätsklassen bleiben unverändert.)*
+Geräte werden basierend auf ihrer Wichtigkeit und ihrem Energiebedarf in Prioritätsklassen eingeteilt. Die Prioritätsklassen ermöglichen eine standardisierte Steuerung durch den Controller.
+
+**Prioritätsklassen:**
+
+- **Kritische Geräte (Prioritätsbereich 1):** 1 - 127
+- **Wichtige Geräte (Prioritätsbereich 2):** 128 - 255
+- **Mittlere Wichtigkeit (Prioritätsbereich 3):** 256 - 511
+- **Niedrige Wichtigkeit (Prioritätsbereich 4):** 512 - 767
+- **Sehr niedrige Wichtigkeit (Prioritätsbereich 5):** 768 - 1023
 
 ## Heartbeat-Protokoll
 
-*(Das Heartbeat-Protokoll bleibt unverändert und enthält bereits genaue Felddefinitionen.)*
+Das Heartbeat-Protokoll übermittelt dynamische Informationen über den aktuellen Zustand des Geräts sowie erwartete Stromverbrauchswerte. Eine Heartbeat-Nachricht muss **alle 60 Sekunden** gesendet werden. Der Controller toleriert das Fehlen von bis zu **zwei** Heartbeat-Nachrichten. Bei Ausbleiben der dritten Nachricht wird das Gerät als inaktiv betrachtet.
+
+**Pflichtfelder:**
+
+- `device_id`: Eindeutige Kennung des Geräts (z. B. UUID v4)
+- `status`: Der aktuelle Status des Geräts
+- `current_power`: Aktuelle Stromaufnahme (in Watt)
+
+**Statuswerte:**
+
+- `on`: Gerät ist eingeschaltet und im normalen Betriebsmodus
+- `off`: Gerät ist ausgeschaltet
+- `override_on`: Gerät wurde manuell eingeschaltet und soll vom Controller nicht ausgeschaltet werden
+- `override_off`: Gerät wurde manuell ausgeschaltet und soll vom Controller nicht eingeschaltet werden
+- `error`: Gerät hat einen Fehlerzustand erkannt
+- `completed`: Gerät hat seinen Betriebszyklus abgeschlossen (für Typ-2-Geräte)
+- `standby`: Gerät ist im Standby-Modus und wartet auf Aktivierung
+
+**Optionale Felder:**
+
+- `expected_power_1min`: Erwarteter Stromverbrauch in der nächsten Minute (in Wattstunden)
+- `expected_power_10min`: Erwarteter Stromverbrauch in den nächsten 10 Minuten (in Wattstunden)
+- `expected_power_1h`: Erwarteter Stromverbrauch in der nächsten Stunde (in Wattstunden)
+- `expected_power_10h`: Erwarteter Stromverbrauch in den nächsten 10 Stunden (in Wattstunden)
+- `current_demand`: Aktueller Leistungsbedarf des Geräts (in Watt)
+
+**Beispiel-Heartbeat:**
+
+```json
+{
+  "device_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "on",
+  "current_power": 500,
+  "current_demand": 700,
+  "expected_power_1min": 5,
+  "expected_power_10min": 50,
+  "expected_power_1h": 300,
+  "expected_power_10h": 3000
+}
+```
 
 ## Eindeutige Geräte-IDs
 
-Die `device_id` muss eindeutig sein und wird als UUID v4 (Universally Unique Identifier Version 4) verwendet. Dies stellt sicher, dass jede Geräte-ID universell eindeutig ist.
+Die `device_id` muss eindeutig sein und wird als **UUID v4** (Universally Unique Identifier Version 4) verwendet. Dies stellt sicher, dass jede Geräte-ID universell eindeutig ist.
 
 **Beispiel:**
 
